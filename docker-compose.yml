@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # RabbitMQ message broker for distributed embedding tasks
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: distributed_rag_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+      RABBITMQ_DEFAULT_VHOST: /
+    ports:
+      - "5672:5672"    # AMQP port
+      - "15672:15672"  # Management UI
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - rag_network
+
+  # ChromaDB vector store (optional - using persistent Docker setup)
+  chromadb:
+    image: chromadb/chroma:latest
+    container_name: distributed_rag_chroma
+    ports:
+      - "8001:8000"
+    volumes:
+      - chromadb_data:/chroma/chroma_data
+    environment:
+      CHROMA_PORT: 8000
+      CHROMA_DATA_DIR: /chroma/chroma_data
+    networks:
+      - rag_network
+    depends_on:
+      - rabbitmq
+
+  # Redis cache (optional - for response caching)
+  redis:
+    image: redis:7-alpine
+    container_name: distributed_rag_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - rag_network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  rabbitmq_data:
+  chromadb_data:
+  redis_data:
+
+networks:
+  rag_network:
+    driver: bridge

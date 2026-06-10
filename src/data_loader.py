@@ -6,7 +6,11 @@ def load_docs(data_directory):
     print(f"[DEBUG] Data path: {data_path}")
     all_documents = []
 
-    pdf_files = list(data_path.glob('**/*.pdf'))
+    if data_path.is_file() and data_path.suffix.lower() == '.pdf':
+        pdf_files = [data_path]
+    else:
+        pdf_files = list(data_path.glob('**/*.pdf'))
+    
     print(f"Found {len(pdf_files)} PDF files: {[str(f) for f in pdf_files]}")
     for pdf in pdf_files:
         print(f"\n Processing {pdf.name}")
