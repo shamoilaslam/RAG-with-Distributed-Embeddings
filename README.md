@@ -1,6 +1,17 @@
 # Distributed RAG Pipeline with Parallel Embedding
 
-A modular, production-ready Retrieval-Augmented Generation (RAG) system featuring:
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python Version](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/)
+
+A modular, production-ready Retrieval-Augmented Generation (RAG) system. This repository implements a distributed embedding pipeline, pluggable vector stores and LLM backends, and an async FastAPI interface for serving RAG queries.
+
+## Table of Contents
+- [Quick Start](#quick-start)
+- [Architecture Overview](#architecture-overview)
+- [Usage Examples](#usage-examples)
+- [Configuration](#configuration)
+- [Project Structure](#project-structure)
+- [Pushing to GitHub](#pushing-to-github)
+
 
 - **Distributed Embedding Pipeline** using RabbitMQ for ~40% latency reduction on multi-document ingestion
 - **Modular Architecture** - swap vector stores, embedding models, and LLM backends independently
