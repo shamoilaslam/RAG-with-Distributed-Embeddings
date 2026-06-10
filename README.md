@@ -1,16 +1,42 @@
-# Distributed RAG Pipeline with Parallel Embedding
+# Distributed RAG Pipeline
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Python Version](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/)
+[![Python Version](https://img.shields.io/badge/python-3.13%2B-blue.svg)](https://www.python.org/)
 
-A modular, production-ready Retrieval-Augmented Generation (RAG) system. This repository implements a distributed embedding pipeline, pluggable vector stores and LLM backends, and an async FastAPI interface for serving RAG queries.
+Compact, modular Retrieval-Augmented Generation (RAG) pipeline with optional distributed embedding (RabbitMQ), pluggable vector stores, and an async FastAPI interface.
 
-## Table of Contents
-- [Quick Start](#quick-start)
-- [Architecture Overview](#architecture-overview)
-- [Usage Examples](#usage-examples)
-- [Configuration](#configuration)
-- [Project Structure](#project-structure)
-- [Pushing to GitHub](#pushing-to-github)
+Features
+- Lightweight local and distributed embedding modes
+- Swappable vector store and LLM backends
+- FastAPI endpoints for ingest/query
+
+Quick start
+1. Install:
+
+```bash
+pip install -r requirements.txt
+```
+
+2. Run locally:
+
+```bash
+python main.py --mode local
+uvicorn app:app --reload --port 8000
+```
+
+3. Query:
+
+```bash
+curl -X POST "http://localhost:8000/query" -H "Content-Type: application/json" -d '{"query":"What is this project?"}'
+```
+
+Notes
+- Do NOT commit secrets: keep API keys in a `.env` file (already ignored).
+- The `src/vectorStore` folder may contain generated vector data—remove if you don't want to include it in the repo.
+
+See source files for implementation details in `src/`.
+
+License
+- MIT
 
 
 - **Distributed Embedding Pipeline** using RabbitMQ for ~40% latency reduction on multi-document ingestion
